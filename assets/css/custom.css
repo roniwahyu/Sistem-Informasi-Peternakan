@@ -1,0 +1,78 @@
+.pager li > a, .pager li > span{
+	background: normal	;
+	border-radius: 4px;
+}
+.next > .pager li > a:focus, .pager li > a:hover{
+	background-color: #ff9900;
+}.next > .pager li > a:focus, .pager li > a{
+	border-color: #cccccc;
+	background-color: #339900;
+}
+.entry:not(:first-of-type)
+{
+    margin-top: 10px;
+}
+
+.glyphicon
+{
+    font-size: 12px;
+}
+.po_form.min-gutter [class*="col"] {
+	padding-left:10;
+    padding-right:10;
+}
+.tambah.row input {
+	color:#000;
+}
+.row.entry select#Kode.form-control,.row.entry select#Satuan.form-control{
+	color:#000;
+}
+.row.entry > .kdbarang,.row.entry > .satuan,.kdbarang,.satuan{
+	color:#000;
+}
+.form-inline.bayar{
+	color:#000;
+}
+.add_panel > .form-groups > .controls input {
+	color:#000;
+}
+#nilai_debet, #nilai_kredit{
+	color:#000;
+
+}
+#faktur_lawan,#no_perkiraan,#deskripsi,#nilai{
+	color:#000;
+}
+.panel-heading.panel-body .form-control {color:#000;}
+.select2 .select2-container .select2-choice {
+    display: block;
+    height: 36px;
+}
+.select2-container .select2-selection--single,.select2-container--default .select2-selection--single .select2-selection__rendered{
+	height:36px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+	height:34px;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+	line-height: 36px;
+}
+.modal-fullscreen{
+  position:absolute;
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+
+}
+.widget{
+	min-height: 175px;
+}
+/*.modal {overflow:auto; }*/
+
+.nav > li.disabled{
+	color: rgba(0, 0, 0, 0.7);
+} 
+.nav > li.disabled a:hover{
+	color: rgba(255, 255, 255, 0.5);
+} 
