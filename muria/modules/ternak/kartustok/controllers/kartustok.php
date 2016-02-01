@@ -182,7 +182,7 @@ class kartustok extends MX_Controller {
         if(!empty($last)):
             $first=substr($last['faktur_pt'],0,2);
             if($first==''||$first==null){
-                $first=' ';
+                $first='KS';
             }
             $left=substr($last['faktur_pt'],2,4);
             $right=substr($last['faktur_pt'],-5);
@@ -213,7 +213,7 @@ class kartustok extends MX_Controller {
             endif;
         else:
             // $gen="PT151100001";
-            $gen=" ".date('ym')."00001";
+            $gen="KS".date('ym')."00001";
         endif;
         return $gen;
     }

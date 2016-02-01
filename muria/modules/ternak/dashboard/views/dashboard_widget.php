@@ -1,4 +1,7 @@
-
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+     <h3 class="text-center">Hasil Produksi Telur</h3>
+            <div id="morris-line-chart" style="height:200px"></div>
+</div>
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
            
                 <!-- <div class="widget red-bg p-lg text-center">
@@ -25,25 +28,24 @@
                             </div>
                             <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
                                 
-                            <h4 class="m-xs">Bakalan</h4>
-                            <h1 class="m-xs">47</h1>
+                                <h4 class="m-xs">Bakalan</h4>
+                                <h1 class="m-xs">47</h1>
                             </div> 
                             <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
                                 
-                            <h4 class="m-xs">Renteng</h4>
-                            <h1 class="m-xs">47</h1>
+                                <h4 class="m-xs">Renteng</h4>
+                                <h1 class="m-xs">47</h1>
                             </div>
                             <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
                                 
-                            <h4 class="m-xs">Wagir</h4>
-                            <h1 class="m-xs">47</h1>
+                                <h4 class="m-xs">Wagir</h4>
+                                <h1 class="m-xs">47</h1>
                             </div>
                            
                         </div>
                 </div>
             </a>
-             <h3 class="text-center">Hasil Produksi Telur</h3>
-            <div id="morris-line-chart" style="height:200px"></div>
+            
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     Aktivitas Rekaman Terbaru
@@ -68,6 +70,22 @@
                                 <span>Pullet/Layer</span>
                                 <h3 class="font-bold">Recording Ayam</h3>
                             </div>
+                            <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
+                                
+                                <h4 class="m-xs">Bakalan</h4>
+                                <h1 class="m-xs">47</h1>
+                            </div> 
+                            <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
+                                
+                                <h4 class="m-xs">Renteng</h4>
+                                <h1 class="m-xs">47</h1>
+                            </div>
+                            <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
+                                
+                                <h4 class="m-xs">Wagir</h4>
+                                <h1 class="m-xs">47</h1>
+                            </div>
+                           
                         </div>
                 </div>
             </a>
@@ -95,6 +113,22 @@
                                 <span>Feeds</span>
                                 <h3 class="font-bold">Recording Pakan</h3>
                             </div>
+                            <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
+                                
+                                <h4 class="m-xs">Bakalan</h4>
+                                <h1 class="m-xs">47</h1>
+                            </div> 
+                            <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
+                                
+                                <h4 class="m-xs">Renteng</h4>
+                                <h1 class="m-xs">47</h1>
+                            </div>
+                            <div class="col-xs-4 col-sm-12 col-md-4 col-lg-4 text-center">
+                                
+                                <h4 class="m-xs">Wagir</h4>
+                                <h1 class="m-xs">47</h1>
+                            </div>
+                           
                         </div>
                 </div>
             </a>

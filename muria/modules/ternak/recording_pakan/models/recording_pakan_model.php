@@ -35,6 +35,34 @@ class Recording_pakan_model extends CI_Model {
             return array();
         }
     }
+    function get_rekaman($faktur) {
+        $this->db->where('faktur', $faktur);
+        $result = $this->db->get('00-00-14-02-view-rekam-pakan-total');
+        if ($result->num_rows() ==1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+    function get_kandang($id) {
+        $this->db->where('id', $id);
+        $result = $this->db->get('kandang');
+        if ($result->num_rows() ==1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+    function get_mitra($kode) {
+        $this->db->select('id,Kode,Nama');
+        $this->db->where('Kode', $kode);
+        $result = $this->db->get('customer');
+        if ($result->num_rows() ==1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
      function get_last(){
 
         $this->db->select('id,faktur');
@@ -176,6 +204,20 @@ class Recording_pakan_model extends CI_Model {
       
        
     }
+    function dropdown_barang($kategori=null){
+        $result = array();
+        if(!empty($kategori)):
+            $array_keys_values = $this->db->query('select id,Kode,Nama from `00-00-01-06-view-barang-kategori` where id_golongan='.$kategori.' order by id asc');
+        else:
+            $array_keys_values = $this->db->query('select id,Kode,Nama from `00-00-01-06-view-barang-kategori` order by id asc');
+        endif;
+        $result[0]="-- Pilih Barang --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->Kode." (".$row->Nama.")";
+        }
+        return $result;
+    } 
     function dropdown_pakan(){
         $result = array();
        

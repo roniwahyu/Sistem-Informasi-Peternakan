@@ -1,4 +1,4 @@
- 
+     
 
                     <div id="form_input" class="row">
                     <?php echo form_open(base_url().'recording_pakan/submit',array('id'=>'addform','role'=>'form','class'=>'form')); ?>

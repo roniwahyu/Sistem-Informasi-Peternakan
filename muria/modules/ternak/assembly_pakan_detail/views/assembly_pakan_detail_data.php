@@ -10,12 +10,14 @@
                                         <tr>
                                                        
                                                         <th>id_assembly</th>
-                                                        <th>faktur_assembly</th>
+                                                        <th>faktur</th>
                                                         <th>id_barang</th>
                                                         <th>jumlah_satuan</th>
                                                         <th>jumlah_total</th>
                                                         <th>id_satuan</th>
                                                         <th>harga</th>
+                                                        <th>is_barangjadi</th>
+                                                        <th>urutan</th>
                                                         <th>subtotal</th>
                                                         <th>user_id</th>
                                                         <th>datetime</th>
@@ -26,7 +28,7 @@
 
                                     <tbody class="table-bordered">
                                         <tr>
-                                            <td colspan="11" class="text-center dataTables_empty"><img src="<?php echo assets_url('images/loader.gif');  ?>" title="Loading" alt="Loading">&nbsp;&nbsp; Loading data, please wait....</td>
+                                            <td colspan="13" class="text-center dataTables_empty"><img src="<?php echo assets_url('images/loader.gif');  ?>" title="Loading" alt="Loading">&nbsp;&nbsp; Loading data, please wait....</td>
                                             
                                         </tr>
                                         

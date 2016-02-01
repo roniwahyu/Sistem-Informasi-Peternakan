@@ -14,9 +14,9 @@
                             </div>
                         
                             <div class="form-group">
-                                <?php echo form_label('faktur_assembly : ','faktur_assembly',array('class'=>'control-label')); ?>
+                                <?php echo form_label('faktur : ','faktur',array('class'=>'control-label')); ?>
                                 <div class="controls">
-                                <?php echo form_input('faktur_assembly',set_value('faktur_assembly', isset($default['faktur_assembly']) ? $default['faktur_assembly'] : ''),'id="faktur_assembly" class="form-control" placeholder="Masukkan faktur_assembly"'); ?>
+                                <?php echo form_input('faktur',set_value('faktur', isset($default['faktur']) ? $default['faktur'] : ''),'id="faktur" class="form-control" placeholder="Masukkan faktur"'); ?>
                                 </div>
                             </div>
                         
@@ -52,6 +52,20 @@
                                 <?php echo form_label('harga : ','harga',array('class'=>'control-label')); ?>
                                 <div class="controls">
                                 <?php echo form_input('harga',set_value('harga', isset($default['harga']) ? $default['harga'] : ''),'id="harga" class="form-control" placeholder="Masukkan harga"'); ?>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group">
+                                <?php echo form_label('is_barangjadi : ','is_barangjadi',array('class'=>'control-label')); ?>
+                                <div class="controls">
+                                <?php echo form_input('is_barangjadi',set_value('is_barangjadi', isset($default['is_barangjadi']) ? $default['is_barangjadi'] : ''),'id="is_barangjadi" class="form-control" placeholder="Masukkan is_barangjadi"'); ?>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group">
+                                <?php echo form_label('urutan : ','urutan',array('class'=>'control-label')); ?>
+                                <div class="controls">
+                                <?php echo form_input('urutan',set_value('urutan', isset($default['urutan']) ? $default['urutan'] : ''),'id="urutan" class="form-control" placeholder="Masukkan urutan"'); ?>
                                 </div>
                             </div>
                         

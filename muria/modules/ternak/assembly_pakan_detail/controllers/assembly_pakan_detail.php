@@ -49,7 +49,7 @@ class assembly_pakan_detail extends MX_Controller {
 
     public function getdatatables(){
         if($this->isadmin()==1):
-            $this->datatables->select('id_detail,id_assembly,faktur_assembly,id_barang,jumlah_satuan,jumlah_total,id_satuan,harga,subtotal,user_id,datetime,')
+            $this->datatables->select('id_detail,id_assembly,faktur,id_barang,jumlah_satuan,jumlah_total,id_satuan,harga,is_barangjadi,urutan,subtotal,user_id,datetime,')
                             ->from('assembly_pakan_detail');
             $this->datatables->add_column('edit',"<div class='btn-group'>
                 <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('assembly_pakan_detail/getone/$1/')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a>
@@ -60,7 +60,7 @@ class assembly_pakan_detail extends MX_Controller {
             $this->datatables->unset_column('id_detail');
 
         else:
-            $this->datatables->select('id_detail,id_assembly,faktur_assembly,id_barang,jumlah_satuan,jumlah_total,id_satuan,harga,subtotal,user_id,datetime,')
+            $this->datatables->select('id_detail,id_assembly,faktur,id_barang,jumlah_satuan,jumlah_total,id_satuan,harga,is_barangjadi,urutan,subtotal,user_id,datetime,')
                             ->from('assembly_pakan_detail');
             $this->datatables->add_column('edit',"<div class='btn-group'>
                 <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('assembly_pakan_detail/getone/$1/')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a></div>" , 'id');

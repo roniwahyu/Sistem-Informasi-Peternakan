@@ -29,7 +29,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Detail Campur Stok (Pakan)</h4>
+                    <h4 class="modal-title">Detail Campur Pakan</h4>
                 </div>
                 <div class="modal-body">
                     
@@ -42,3 +42,26 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+
+<div class="modal animated slideInLeft" id="modal-notif">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                <h3 class="panel-title">Campur Pakan </h3>
+                      </div>
+                <div class="panel-body">
+                   <div class="alert alert-success">
+                       <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> -->
+                       <strong>Berhasil</strong> Assembly Pakan Berhasil disimpan ...
+                   </div>
+                   <div class="text-center">                   
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                   </div>
+                </div>
+            </div>
+           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -26,11 +26,46 @@ class Assembly_pakan_model extends CI_Model {
             return array();
         }
     }
+    function get_last(){
 
+        $this->db->select('id,faktur');
+        $this->db->order_by('id','DESC');
+        $this->db->limit(1);
+
+        $result=$this->db->get('assembly_pakan');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+    function get_detail($faktur) {
+        $this->db->where('faktur', $faktur);
+        $result = $this->db->get('assembly_pakan_detail');
+        if ($result->num_rows() >0) {
+            return $result->result_array();
+        } else {
+            return array();
+        }
+    }
+    function get_lastdetail($faktur) {
+        $this->db->select('id_detail,faktur,urutan');
+        $this->db->where('faktur', $faktur);
+        $this->db->limit(1);
+        $this->db->order_by('urutan','DESC');
+        $result = $this->db->get('assembly_pakan_detail');
+        if ($result->num_rows() ==1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
     function save() {
            $data = array(
         
             'faktur' => $this->input->post('faktur', TRUE),
+           
+            'faktur_reff' => $this->input->post('faktur_reff', TRUE),
            
             'tanggal' => $this->input->post('tanggal', TRUE),
            
@@ -39,6 +74,18 @@ class Assembly_pakan_model extends CI_Model {
             'id_recording' => $this->input->post('id_recording', TRUE),
            
             'id_formulasi' => $this->input->post('id_formulasi', TRUE),
+           
+            'id_barang_jadi' => $this->input->post('id_barang_jadi', TRUE),
+           
+            'id_satuan_jadi' => $this->input->post('id_satuan_jadi', TRUE),
+           
+            'jumlah' => $this->input->post('jumlah', TRUE),
+           
+            'harga' => $this->input->post('harga', TRUE),
+           
+            'total_jadi' => $this->input->post('total_jadi', TRUE),
+           
+            'akun_hpp' => $this->input->post('akun_hpp', TRUE),
            
             'akun_perkiraan' => $this->input->post('akun_perkiraan', TRUE),
            
@@ -54,9 +101,9 @@ class Assembly_pakan_model extends CI_Model {
            
             'date_posted' => $this->input->post('date_posted', TRUE),
            
-            'id_user' => $this->input->post('id_user', TRUE),
+            'id_user' => $this->session->userdata('user_id'),
            
-            'datetime' => $this->input->post('datetime', TRUE),
+            'datetime' => date('Y-m-d H:m:s'),
            
         );
         $this->db->insert('assembly_pakan', $data);
@@ -69,6 +116,8 @@ class Assembly_pakan_model extends CI_Model {
         'id' => $this->input->post('id',TRUE),
        'faktur' => $this->input->post('faktur', TRUE),
        
+       'faktur_reff' => $this->input->post('faktur_reff', TRUE),
+       
        'tanggal' => $this->input->post('tanggal', TRUE),
        
        'id_gudang' => $this->input->post('id_gudang', TRUE),
@@ -76,6 +125,18 @@ class Assembly_pakan_model extends CI_Model {
        'id_recording' => $this->input->post('id_recording', TRUE),
        
        'id_formulasi' => $this->input->post('id_formulasi', TRUE),
+       
+       'id_barang_jadi' => $this->input->post('id_barang_jadi', TRUE),
+       
+       'id_satuan_jadi' => $this->input->post('id_satuan_jadi', TRUE),
+       
+       'jumlah' => $this->input->post('jumlah', TRUE),
+       
+       'harga' => $this->input->post('harga', TRUE),
+       
+       'total_jadi' => $this->input->post('total_jadi', TRUE),
+       
+       'akun_hpp' => $this->input->post('akun_hpp', TRUE),
        
        'akun_perkiraan' => $this->input->post('akun_perkiraan', TRUE),
        
@@ -91,9 +152,9 @@ class Assembly_pakan_model extends CI_Model {
        
        'date_posted' => $this->input->post('date_posted', TRUE),
        
-       'id_user' => $this->input->post('id_user', TRUE),
+       'id_user' => $this->session->userdata('user_id'),
        
-       'datetime' => $this->input->post('datetime', TRUE),
+       'datetime' => date('Y-m-d H:m:s'),
        
         );
         $this->db->where('id', $id);
@@ -116,9 +177,88 @@ class Assembly_pakan_model extends CI_Model {
         $this->db->where('faktur', $bukti);
         $this->db->delete('assembly_pakan_detail');
 
-         
-      
+    }
+
+    function get_total($faktur=null){
+
+        $this->db->select('total');
+        $this->db->order_by('faktur','DESC');
+        $this->db->where('faktur',$faktur);
+        $this->db->limit(1);
+
+        $result=$this->db->get('00-00-16-02-view-rekam-assembly-total');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+    function get_kandang($id) {
+        $this->db->where('id', $id);
+        $result = $this->db->get('kandang');
+        if ($result->num_rows() ==1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+    function get_mitra($kode) {
+        $this->db->select('id,Kode,Nama');
+        $this->db->where('Kode', $kode);
+        $result = $this->db->get('customer');
+        if ($result->num_rows() ==1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+     function dropdown_pakan_jadi(){
+        $result = array();
        
+            $array_keys_values = $this->db->query('select id,kode,Nama from barang where id_golongan="02" and Nama like "Pakan%" order by Kode asc');
+        $result[0]="-- Pilih Pakan --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kode." (".$row->Nama.")";
+        }
+           
+        return $result;
+    }
+     function dropdown_pakan(){
+        $result = array();
+       
+            $array_keys_values = $this->db->query('select id,kode,Nama from barang where id_golongan="02" order by Kode asc');
+        $result[0]="-- Pilih Pakan --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kode." (".$row->Nama.")";
+        }
+           
+        return $result;
+    }
+    function dropdown_vaksin(){
+        $result = array();
+       
+            $array_keys_values = $this->db->query('select id,kode,Nama from barang where id_golongan="15" order by Kode asc');
+        $result[0]="-- Pilih Pakan --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kode." (".$row->Nama.")";
+        }
+           
+        return $result;
+    }
+    function dropdown_obat(){
+        $result = array();
+       
+            $array_keys_values = $this->db->query('select id,kode,Nama from barang where id_golongan="03" order by Kode asc');
+        $result[0]="-- Pilih Pakan --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kode." (".$row->Nama.")";
+        }
+           
+        return $result;
     }
     function dropdown_gudang($mitra=null){
         $result = array();
@@ -146,6 +286,7 @@ class Assembly_pakan_model extends CI_Model {
         }
         return $result;
     }
+
     //Update 07122013 SWI
     //untuk Array Dropdown
     function get_dropdown_array($value){

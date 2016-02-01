@@ -8,6 +8,8 @@ class recording_pakan extends MX_Controller {
         //Load IgnitedDatatables Library
         $this->load->model('recording_pakan_model','pakandb',TRUE);
         $this->load->model('kartustok/kartustok_model','stokdb',TRUE);
+        $this->load->model('jurnal_model','jrdb',TRUE);
+        $this->load->model('jurnal_detail_model','detaildb',TRUE);
         $this->session->set_userdata('lihat','recording_pakan');
         if ( !$this->ion_auth->logged_in()): 
             redirect('auth/login', 'refresh');
@@ -228,16 +230,14 @@ class recording_pakan extends MX_Controller {
         }
       
     }
-    function submit_jurnal($data){
-
-    }
+    
     function submit_stok($data){
         
         foreach ($data as $key => $value) {
             $faktur_stok=$this->stokdb->get_last();
-            print_r($faktur_stok);
+            // print_r($faktur_stok);
             $newfaktur=genfaktur_stok($faktur_stok);
-            print_r($newfaktur);
+            // print_r($newfaktur);
             # code...
             $data[$key]['faktur']=$newfaktur;
             $this->stokdb->save_stok($data[$key]);
@@ -246,23 +246,54 @@ class recording_pakan extends MX_Controller {
         print_r($data);
         echo "</pre>";*/
     }
+    function submit_jurnal($data){
+        
+        // foreach ($data as $key => $value) {
+            $jurnal=$this->jrdb->get_last_jr();
+            // print_r($jurnal);
+            $newfaktur=genfaktur_jurnal($jurnal);
+            // print_r($newfaktur);
+            # code...
+            $data['no_jurnal']=$newfaktur;
+            $this->jrdb->save_jurnal($data);
+            return $newfaktur;
+        // }
+        /*echo "<pre>";
+        print_r($data);
+        echo "</pre>";*/
+    } 
+    function submit_detailjurnal($data){
+        
+        // foreach ($data as $key => $value) {
+            $jurnal=$this->detaildb->get_last_jr();
+            // print_r($jurnal);
+            $newfaktur=genfaktur_jurnal($jurnal);
+            // print_r($newfaktur);
+            # code...
+            $data['no_jurnal']=$newfaktur;
+            $this->detaildb->save_jurnal($data);
+        // }
+        /*echo "<pre>";
+        print_r($data);
+        echo "</pre>";*/
+    }
 
     public function submit(){
         $faktur=$this->input->post('faktur');
         $detail=$this->pakandb->get_detail($faktur);
+       
         $faktur_stok=$this->stokdb->get_last();
         $newstok=genfaktur_stok($faktur_stok);
         $recording=$this->input->post('id_recording');
         $faktur_ref=$this->input->post('faktur', TRUE);
         $ket=$this->input->post('keterangan', TRUE);
         $tgl=$this->input->post('tanggal', TRUE);
+        $kandang=$this->pakandb->get_kandang($this->input->post('id_kandang'));
+        $mitra=$this->pakandb->get_mitra($this->input->post('id_mitra'));
         
-        // print_r($detail);
         foreach ($detail as $k => $val) {
             # code...
             $datastok[] = array(
-        
-                   
                     'faktur_ref' => $faktur_ref,
                     'tanggal' => $tgl,
                     'tipe_kartustok' => 'Pakan',
@@ -275,10 +306,43 @@ class recording_pakan extends MX_Controller {
                     'keterangan' => 'Pemberian Pakan Tanggal: '.$tgl,
                     'user_id' => $this->session->userdata('user_id'),
                     'datetime' => date('Y-m-d H:m:s'),
-                   
                 );
+           
         }
+         $dtjurnal= array(
+                    'no_bukti' => $faktur_ref,
+                    'tgl' => $tgl,
+                    'tgl_posted' => date('Y-m-d H:m:s'),
+                   
+                    'ket' => 'Pemberian Pakan Tanggal: '.$tgl.' Mitra: '.$mitra['Kode'].' Kandang: '.$kandang['Keterangan'],
+                    'user_id' => $this->session->userdata('user_id'),
+                    'datetime' => date('Y-m-d H:m:s'),
+                );
+        $jrdetail[] = array(
         
+           
+            'akun_detail' => '5.600.600',
+            'tipe_detail' => 'D',
+            'ket_detail' => 'Pemberian Pakan Kandang: '.$kandang['Keterangan'],
+            'nilai' => $this->input->post('total_debet', TRUE),
+            'no_urut' => 1,
+            'user_id' => $this->session->userdata('user_id'),
+            'datetime' => date('Y-m-d H:m:s'),
+           
+        );
+        $jrdetail[] = array(
+        
+           
+            'akun_detail' => '1.901',
+            'tipe_detail' => 'K',
+            'ket_detail' => 'Pemberian Pakan Tanggal: '.$tgl,
+            'nilai' => $this->input->post('total_kredit', TRUE),
+            'no_urut' => 2,
+            'user_id' => $this->session->userdata('user_id'),
+            'datetime' => date('Y-m-d H:m:s'),
+           
+        );
+
         // print_r($datastok);
         
         if ($this->input->post('ajax')){
@@ -287,6 +351,17 @@ class recording_pakan extends MX_Controller {
           }else{
             $this->pakandb->save();
             $this->submit_stok($datastok);
+            $pakan=$this->pakandb->get_rekaman($faktur);
+            print_r($pakan);
+            $dtjurnal['total_kredit']=$pakan['total'];
+            $dtjurnal['total_debet']=$pakan['total'];
+            $jrdetail[0]['nilai']=$pakan['total'];
+            $jrdetail[1]['nilai']=$pakan['total'];
+            $new=$this->submit_jurnal($dtjurnal);
+            $jrdetail[0]['no_jurnal']=$new;
+            $jrdetail[1]['no_jurnal']=$new;
+            $this->detaildb->save_detail($jrdetail);
+
           }
 
         }else{
@@ -295,7 +370,15 @@ class recording_pakan extends MX_Controller {
                 $this->pakandb->update($this->input->post('id'));
               }else{
                 $this->pakandb->save();
-                $this->submit_stok($datastok);
+                $this->submit_jurnal($dtjurnal);
+                $pakan=$this->pakandb->get_rekaman($faktur);
+                print_r($pakan);
+                $new=$this->submit_stok($datastok);
+                $jrdetail[0]['nilai']=$pakan['total'];
+                $jrdetail[1]['nilai']=$pakan['total'];
+                $jrdetail[0]['no_jurnal']=$new;
+                $jrdetail[1]['no_jurnal']=$new;
+                $this->detaildb->save_detail($jrdetail);
               }
           }
         }

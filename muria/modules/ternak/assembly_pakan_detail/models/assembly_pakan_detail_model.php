@@ -32,7 +32,7 @@ class Assembly_pakan_detail_model extends CI_Model {
         
             'id_assembly' => $this->input->post('id_assembly', TRUE),
            
-            'faktur_assembly' => $this->input->post('faktur_assembly', TRUE),
+            'faktur' => $this->input->post('faktur', TRUE),
            
             'id_barang' => $this->input->post('id_barang', TRUE),
            
@@ -43,6 +43,10 @@ class Assembly_pakan_detail_model extends CI_Model {
             'id_satuan' => $this->input->post('id_satuan', TRUE),
            
             'harga' => $this->input->post('harga', TRUE),
+           
+            'is_barangjadi' => $this->input->post('is_barangjadi', TRUE),
+           
+            'urutan' => $this->input->post('urutan', TRUE),
            
             'subtotal' => $this->input->post('subtotal', TRUE),
            
@@ -61,7 +65,7 @@ class Assembly_pakan_detail_model extends CI_Model {
         'id_detail' => $this->input->post('id_detail',TRUE),
        'id_assembly' => $this->input->post('id_assembly', TRUE),
        
-       'faktur_assembly' => $this->input->post('faktur_assembly', TRUE),
+       'faktur' => $this->input->post('faktur', TRUE),
        
        'id_barang' => $this->input->post('id_barang', TRUE),
        
@@ -72,6 +76,10 @@ class Assembly_pakan_detail_model extends CI_Model {
        'id_satuan' => $this->input->post('id_satuan', TRUE),
        
        'harga' => $this->input->post('harga', TRUE),
+       
+       'is_barangjadi' => $this->input->post('is_barangjadi', TRUE),
+       
+       'urutan' => $this->input->post('urutan', TRUE),
        
        'subtotal' => $this->input->post('subtotal', TRUE),
        

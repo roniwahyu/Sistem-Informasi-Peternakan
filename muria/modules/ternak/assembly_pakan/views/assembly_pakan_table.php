@@ -1,8 +1,8 @@
 
     <div class="tabbable page-tabs">
         <ul class="nav nav-tabs">
-            <li class="daftar active"><a href="#inside" data-toggle="tab"><i class="icon-checkbox-partial"></i> Daftar Campur Stok (Pakan)</a></li>
-            <li class="baru"><a href="#outside" data-toggle="tab"><i class="icon-plus"></i> Tambah Campur Stok (Pakan) Baru</a></li>
+            <li class="daftar active"><a href="#inside" data-toggle="tab"><i class="icon-checkbox-partial"></i> Daftar Campur Pakan</a></li>
+            <li class="baru"><a href="#outside" data-toggle="tab"><i class="icon-plus"></i> Tambah Campur Pakan Baru</a></li>
         </ul>
         <div class="tab-content">
                     
@@ -11,12 +11,12 @@
                         <!-- AJAX source -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h6 class="panel-title"><i class="icon-table"></i> Daftar Campur Stok (Pakan)</h6> 
+                                <h6 class="panel-title"><i class="icon-table"></i> Daftar Campur Pakan</h6> 
                                
                             </div>
                             <div class="panel-body">
                                  <div class="btn-group pull-right">
-                                    <a href="#outside" data-toggle="tab" class="baru btn btn-success"><i class="icon-plus"></i> Tambah Campur Stok (Pakan) Baru</a>
+                                    <a href="#outside" data-toggle="tab" class="baru btn btn-success"><i class="icon-plus"></i> Tambah Campur Pakan Baru</a>
                                 </div> 
                             <?php $this->load->view('assembly_pakan_data') ?>
                             </div>
