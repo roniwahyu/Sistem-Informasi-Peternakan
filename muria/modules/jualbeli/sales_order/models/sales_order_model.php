@@ -26,18 +26,30 @@ class Sales_order_model extends CI_Model {
             return array();
         }
     }
-    function get_last_so(){
+    function get_last(){
 
         $this->db->select('id,faktur');
         $this->db->order_by('id','DESC');
         $this->db->limit(1);
 
-        $result=$this->db->get('kas_keluar');
+        $result=$this->db->get('sales_order');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array('faktur'=>'');
+        }
+    }
+    function get_detail_total($faktur=null){
+        if(!empty($faktur)):
+            $this->db->where('faktur',$faktur);
+        endif;
+        $result=$this->db->get('00-00-19-02-view-sales-order-total');
         if ($result->num_rows() == 1) {
             return $result->row_array();
         } else {
             return array();
         }
+        
     }
     function save() {
            $data = array(
@@ -60,26 +72,31 @@ class Sales_order_model extends CI_Model {
            
             'id_bayar' => $this->input->post('id_bayar', TRUE),
            
-            'totalbayar' => $this->input->post('totalbayar', TRUE),
+            'totalbayar' => $this->input->post('total', TRUE),
            
             'pajak' => $this->input->post('pajak', TRUE),
            
             'total_pajak' => $this->input->post('total_pajak', TRUE),
            
             'grandtotal' => $this->input->post('grandtotal', TRUE),
+            'uangmuka' => $this->input->post('uangmuka', TRUE),
+            'sisa' => $this->input->post('sisa', TRUE),
+          
            
-            'biaya_lain' => $this->input->post('biaya_lain', TRUE),
+            'biaya_lain' => $this->input->post('biayakirim', TRUE),
            
             'status' => $this->input->post('status', TRUE),
            
-            'id_user' => $this->session->userdata('user_id'),
+            'id_user' => userid(),
            
-            'datetime' => date('Y-m-d H:i:s'),
+            'datetime' => now(),
            
         );
         $this->db->insert('sales_order', $data);
     }
-
+    function save_detail($data){
+        $this->db->insert('sales_order_detail',$data);
+    }
     function update($id) {
         $data = array(
         'id' => $this->input->post('id',TRUE),
@@ -101,21 +118,24 @@ class Sales_order_model extends CI_Model {
        
        'id_bayar' => $this->input->post('id_bayar', TRUE),
        
-       'totalbayar' => $this->input->post('totalbayar', TRUE),
+       'totalbayar' => $this->input->post('total', TRUE),
        
        'pajak' => $this->input->post('pajak', TRUE),
        
        'total_pajak' => $this->input->post('total_pajak', TRUE),
        
        'grandtotal' => $this->input->post('grandtotal', TRUE),
+       'uangmuka' => $this->input->post('uangmuka', TRUE),
+       'sisa' => $this->input->post('sisa', TRUE),
+      
        
-       'biaya_lain' => $this->input->post('biaya_lain', TRUE),
+       'biaya_lain' => $this->input->post('biayakirim', TRUE),
        
        'status' => $this->input->post('status', TRUE),
        
-       'id_user' => $this->session->userdata('user_id'),
+       'id_user' => userid(),
        
-       'datetime' => date('Y-m-d H:i:s'),
+       'datetime' => now(),
        
         );
         $this->db->where('id', $id);
@@ -128,6 +148,35 @@ class Sales_order_model extends CI_Model {
         $this->db->delete('sales_order'); 
        
     }
+    function delete_detail($id=null) {
+        $this->db->where('id_detail', $id);
+      
+        $this->db->delete('sales_order_detail'); 
+       
+    } 
+    function delete_by_bukti($bukti=null) {
+        $this->db->where('faktur', $bukti);
+        $this->db->delete('sales_order_detail');
+
+         
+      
+       
+    }
+    function dropdown_barang($kategori=null){
+        $result = array();
+        if(!empty($kategori)):
+            $array_keys_values = $this->db->query('select id,Kode,Nama from `00-00-01-06-view-barang-kategori` where id_golongan='.$kategori.' order by id asc');
+        else:
+            $array_keys_values = $this->db->query('select id,Kode,Nama from `00-00-01-06-view-barang-kategori` order by id asc');
+        endif;
+        $result[0]="-- Pilih Barang --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->Kode." (".$row->Nama.")";
+        }
+        return $result;
+    } 
+
     function dropdown_customer(){
         $result = array();
         $array_keys_values = $this->db->query('select id,Kode,Nama,Wilayah from `customer` order by id asc');

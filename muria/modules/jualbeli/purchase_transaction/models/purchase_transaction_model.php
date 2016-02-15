@@ -85,6 +85,7 @@ class Purchase_transaction_model extends CI_Model {
         }
         
     }
+    
      function get_last_pt(){
 
         $this->db->select('id,faktur_pt');
@@ -125,7 +126,36 @@ class Purchase_transaction_model extends CI_Model {
             return array();
         }
     }
+    function getorder_supplier($idsupplier){
 
+        // $this->db->select('idpo,faktur_po,tgl_po,kdsupplier,namasupplier,grandtotal,idsupplier');
+        $this->db->select('idpo,faktur_po');
+        $this->db->where('idsupplier',$idsupplier);
+        $this->db->where('idpt',null);
+        $this->db->order_by('idpo','DESC');
+        
+
+        $result=$this->db->get('00-00-03-01-view-po-trx');
+        // $result=$this->db->get('00-00-03-00-view-purchase-order');
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        } else {
+            return array();
+        }
+    }
+    function getorderdetail($faktur){
+
+        $this->db->where('faktur',$faktur);
+        $this->db->order_by('id_detail','DESC');
+        
+
+        $result=$this->db->get('00-00-19-01-view-sales-order-detail');
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        } else {
+            return array();
+        }
+    }
     function save() {
                // $gtotal_money = preg_replace('/,(\d{2})/', '.$1', $this->input->post('grandtotal', TRUE));
         // $gtotal_money = preg_replace('/[^\.]/', '',$this->input->post('grandtotal', TRUE));

@@ -48,14 +48,16 @@ class Sales_order_detail_model extends CI_Model {
            
             'diskon3' => $this->input->post('diskon3', TRUE),
            
-            'id_user' => $this->input->post('id_user', TRUE),
+            'id_user' => userid(),
            
-            'datetime' => $this->input->post('datetime', TRUE),
+            'datetime' => now(),
            
         );
         $this->db->insert('sales_order_detail', $data);
     }
-
+    function save_detail($data){
+        $this->db->insert('sales_order_detail_detail',$data);
+    }
     function update($id_detail) {
         $data = array(
         'id_detail' => $this->input->post('id_detail',TRUE),
@@ -77,9 +79,9 @@ class Sales_order_detail_model extends CI_Model {
        
        'diskon3' => $this->input->post('diskon3', TRUE),
        
-       'id_user' => $this->input->post('id_user', TRUE),
+       'id_user' => userid(),
        
-       'datetime' => $this->input->post('datetime', TRUE),
+       'datetime' => now(),
        
         );
         $this->db->where('id_detail', $id_detail);
@@ -90,6 +92,20 @@ class Sales_order_detail_model extends CI_Model {
     function delete($id_detail) {
         $this->db->where('id_detail', $id_detail);
         $this->db->delete('sales_order_detail'); 
+       
+    }
+    function delete_detail($id=null) {
+        $this->db->where('id_detail', $id);
+      
+        $this->db->delete('sales_order_detail_detail'); 
+       
+    } 
+    function delete_by_bukti($bukti=null) {
+        $this->db->where('faktur', $bukti);
+        $this->db->delete('sales_order_detail_detail');
+
+         
+      
        
     }
 

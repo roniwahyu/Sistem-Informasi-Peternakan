@@ -13,7 +13,8 @@
         </div>
         <div class="panel-body">
             <div class="row clearfix">
-                <?php $this->load->view('form_po_tanpa_bayar') ?>
+                <?php $this->load->view('form_po') ?>
+                <?php //$this->load->view('form_po_tanpa_bayar') ?>
 
                 
             </div>

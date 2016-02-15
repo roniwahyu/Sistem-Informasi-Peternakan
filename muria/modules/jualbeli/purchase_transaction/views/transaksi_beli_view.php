@@ -30,7 +30,7 @@
                     <h4 class="modal-title">Detail Transaksi Pembelian</h4>
                 </div>
                 <div class="modal-body">
-                    <table id="datax" class="tabelpo table table-bordered table-condensed table-striped" style="">
+                    <table id="datax" class="tabelpo table table-bordered table-condensed table-striped" style="width:100%">
                         <thead class="">
                             <tr>
                                                                            
@@ -41,7 +41,7 @@
                                                         <!-- <th>Tanggal Kirim</th> -->
                                                         <th>Total</th>
                                                         <th>Status</th>
-                                                        <th>Cara Bayar</th>
+                                                      
                                                         <th style="width:100px">Aksi</th>
 
                                                     </tr>
@@ -131,6 +131,47 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
               
             </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal" id="modal-panel">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Order Pembelian</h4>
+            </div>
+            <div class="modal-body">
+                <table id="data" class="table-po table-bordered table-condensed table-striped" style="width:100%">
+                                    <thead class="">
+                                        <tr>
+                                                       
+                                                        <th>Faktur</th>
+                                                        <th>Tanggal</th>                                                     
+                                                        <th>Supplier</th>
+                                                        
+                                                        <th>Total</th>
+                                                        <th>Status</th>
+                                                      
+                                                        <th>Aksi</th>
+
+                                                    </tr>
+                                    </thead>
+
+                                    <tbody class="table-bordered">
+                                        <tr>
+                                            <td colspan="7" class="text-center dataTables_empty"><img src="<?php echo assets_url('images/loader.gif');  ?>" title="Loading" alt="Loading">&nbsp;&nbsp; Loading data, please wait....</td>
+                                            
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                
+            </div>
+           
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

@@ -1,9 +1,9 @@
 <div class="datatable-ajax-source">
         <div class="btn-group" style="margin:20px 0px 30px">
-                            <a href="<?php echo base_url('delivery_order/baru') ?>" class="btn btn-lg btn-success"><i class="fa fa-plus"></i> Buka delivery_order Baru </a>
-                            <a href="<?php echo base_url('delivery_order') ?>" class="btn btn-lg btn-info"><i class="fa fa-database"></i> Data delivery_order</a>
+                            <a href="<?php echo base_url('delivery_order/baru') ?>" class="btn btn-lg btn-success"><i class="fa fa-plus"></i> Buka Order Pengiriman/Delivery Order Baru </a>
+                            <a href="<?php echo base_url('delivery_order') ?>" class="btn btn-lg btn-info"><i class="fa fa-database"></i> Data Order Pengiriman/Delivery Order</a>
                         </div>
-        <h2 class="text-center" style="margin:20px 0px 30px" >Tabel Data delivery_order</h2>
+        <h2 class="text-center" style="margin:20px 0px 30px" >Tabel Data Order Pengiriman/Delivery Order</h2>
     
                                 <table id="datatables" class="table table-bordered table-condensed table-striped" style="">
                                     <thead class="">

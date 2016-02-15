@@ -243,12 +243,6 @@
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             
-                            <div class="form-group">
-                                <?php echo form_label('Cara Pembayaran : ','id_bayar',array('class'=>'control-label')); ?>
-                                <div class="controls">
-                                <?php echo form_dropdown('id_bayar',$opt_bayar,'','id="id_bayar" class="form-control" placeholder="Enter id_bayar"'); ?>
-                                </div>
-                            </div>
                         
                             
                         

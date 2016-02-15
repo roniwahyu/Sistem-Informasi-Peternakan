@@ -12,8 +12,7 @@ class sales_order_detail extends MX_Controller {
             redirect('auth/login', 'refresh');
         endif;
 
-       
-       
+           
         
         $this->template->add_js('datatables.js');
         $this->template->add_js('muria.js');
@@ -23,18 +22,25 @@ class sales_order_detail extends MX_Controller {
 
     public function index() {
         $this->template->set_title('Kelola Sales_order_detail');
-        
         $this->template->add_js('var baseurl="'.base_url().'sales_order_detail/";','embed');  
-        
-
-        //<!-- $this->template->add_js('datepicker.js'); -->
-        
         $this->template->load_view('sales_order_detail_view',array(
-                        'title'=>'Kelola Data Sales_order_detail',
-                        'subtitle'=>'Pengelolaan Sales_order_detail',
-                        'breadcrumb'=>array(
-                            'Sales_order_detail'),
-                        ));
+            'view'=>'',
+            'title'=>'Kelola Data Sales_order_detail',
+            'subtitle'=>'Pengelolaan Sales_order_detail',
+            'breadcrumb'=>array(
+            'Sales_order_detail'),
+        ));
+    }
+     public function baru() {
+        $this->template->set_title('Kelola Sales_order_detail');
+        $this->template->add_js('var baseurl="'.base_url().'sales_order_detail/";','embed');  
+        $this->template->load_view('sales_order_detail_view',array(
+            'view'=>'',
+            'title'=>'Kelola Data Sales_order_detail',
+            'subtitle'=>'Pengelolaan Sales_order_detail',
+            'breadcrumb'=>array(
+            'Sales_order_detail'),
+        ));
         
     }
      
@@ -62,7 +68,10 @@ class sales_order_detail extends MX_Controller {
         endif;
         echo $this->datatables->generate();
     }
-
+    function enkrip(){
+        return md5($this->session->userdata('lihat').":".$this->getuser()."+".date('H:m'));
+        // echo $this->session->userdata('sales_order_detail');
+    }
     function isadmin(){
        return $this->ion_auth->is_admin();
     }
@@ -141,6 +150,7 @@ class sales_order_detail extends MX_Controller {
           }
         }
     }
+    
 
     
     public function delete(){
@@ -153,6 +163,61 @@ class sales_order_detail extends MX_Controller {
             }
         }
     }
+     public function delete_detail(){
+        if(isset($_POST['ajax'])){
+            if(!empty($_POST['id_detail'])){
+                $this->sales_order_detaildb->delete_detail($this->input->post('id_detail'));
+                $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
+            }else {
+                $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
+            }
+        }
+    } 
+    private function gen_faktur(){
+        $last=$this->sales_order_detaildb->get_last_pt();
+        // print_r($last);
+        if(!empty($last)):
+            $first=substr($last['faktur_pt'],0,2);
+            if($first==''||$first==null){
+                $first=' ';
+            }
+            $left=substr($last['faktur_pt'],2,4);
+            $right=substr($last['faktur_pt'],-5);
+            $nopt=number_format($right); 
+            
+            
+            $newpo=strval($nopt+1);
+            $newpo2=substr(strval("00000$newpo"),-5);
+
+        $tahun=substr($left,0,2);
+        $bulan=substr($left,2,4);
+        
+            if($tahun<>date('y')):
+                $tahun=date('y');
+                if($bulan==date('m')):
+                    $gen=strval($first.$tahun.$bulan."00001");
+                elseif($bulan<>date('m')):
+                    $bulan=date('m');
+                    $gen=strval($first.$tahun.$bulan."00001");
+                endif;
+            elseif($tahun==date('y')):
+                if(intval($bulan)<>date('m')):
+                    $bulan=date('m');
+                    $gen=strval($first.$tahun.$bulan."00001"); 
+                elseif($bulan==date('m')):
+                    $gen=strval($first.$tahun.$bulan.$newpo2);
+                endif;
+            endif;
+        else:
+            // $gen="PT151100001";
+            $gen=" ".date('ym')."00001";
+        endif;
+        return $gen;
+    }
+     function get_new_faktur(){
+        echo $this->gen_faktur();
+    }
+
     
 
 }

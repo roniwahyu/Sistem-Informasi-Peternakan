@@ -57,7 +57,9 @@ class Sales_trx_detail_model extends CI_Model {
         );
         $this->db->insert('sales_trx_detail', $data);
     }
-
+    function save_detail($data){
+        $this->db->insert('sales_trx_detail_detail',$data);
+    }
     function update($id_detail) {
         $data = array(
         'id_detail' => $this->input->post('id_detail',TRUE),
@@ -94,6 +96,20 @@ class Sales_trx_detail_model extends CI_Model {
     function delete($id_detail) {
         $this->db->where('id_detail', $id_detail);
         $this->db->delete('sales_trx_detail'); 
+       
+    }
+    function delete_detail($id=null) {
+        $this->db->where('id_detail', $id);
+      
+        $this->db->delete('sales_trx_detail_detail'); 
+       
+    } 
+    function delete_by_bukti($bukti=null) {
+        $this->db->where('faktur', $bukti);
+        $this->db->delete('sales_trx_detail_detail');
+
+         
+      
        
     }
 

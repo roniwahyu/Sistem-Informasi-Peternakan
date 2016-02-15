@@ -1,6 +1,6 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
 
-class purchase_order extends MX_Controller {
+class purchase_order_ok extends MX_Controller {
 
     function __construct() {
         parent::__construct();

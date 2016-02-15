@@ -69,7 +69,9 @@ class Sales_return_model extends CI_Model {
         );
         $this->db->insert('sales_return', $data);
     }
-
+    function save_detail($data){
+        $this->db->insert('sales_return_detail',$data);
+    }
     function update($id) {
         $data = array(
         'id' => $this->input->post('id',TRUE),
@@ -118,6 +120,20 @@ class Sales_return_model extends CI_Model {
     function delete($id) {
         $this->db->where('id', $id);
         $this->db->delete('sales_return'); 
+       
+    }
+    function delete_detail($id=null) {
+        $this->db->where('id_detail', $id);
+      
+        $this->db->delete('sales_return_detail'); 
+       
+    } 
+    function delete_by_bukti($bukti=null) {
+        $this->db->where('faktur', $bukti);
+        $this->db->delete('sales_return_detail');
+
+         
+      
        
     }
 

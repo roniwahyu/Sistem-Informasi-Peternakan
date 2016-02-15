@@ -6,7 +6,7 @@ class delivery_order extends MX_Controller {
         parent::__construct();
           
         //Load IgnitedDatatables Library
-        $this->load->model('delivery_order_model','delivery_orderdb',TRUE);
+        $this->load->model('delivery_order_model','devdb',TRUE);
         $this->session->set_userdata('lihat','delivery_order');
         if ( !$this->ion_auth->logged_in()): 
             redirect('auth/login', 'refresh');
@@ -21,25 +21,41 @@ class delivery_order extends MX_Controller {
     }
 
     public function index() {
-        $this->template->set_title('Kelola Delivery_order');
+        $this->template->set_title('Kelola Order Pengiriman/Delivery Order ');
         $this->template->add_js('var baseurl="'.base_url().'delivery_order/";','embed');  
         $this->template->load_view('delivery_order_view',array(
-            'view'=>'',
-            'title'=>'Kelola Data Delivery_order',
-            'subtitle'=>'Pengelolaan Delivery_order',
+            'view'=>'delivery_order_data',
+            'title'=>'Kelola Data Order Pengiriman/Delivery Order ',
+            'subtitle'=>'Pengelolaan Order Pengiriman/Delivery Order ',
+            'form_title'=>'Order Pengiriman/Delivery Order ',
             'breadcrumb'=>array(
-            'Delivery_order'),
+            'Order Pengiriman/Delivery Order '),
         ));
     }
      public function baru() {
-        $this->template->set_title('Kelola Delivery_order');
-        $this->template->add_js('var baseurl="'.base_url().'delivery_order/";','embed');  
+        $this->template->set_title('Kelola Order Pengiriman/Delivery Order ');
+        $this->template->add_js('plugins/select2/select2.min.js');
+        $this->template->add_css('plugins/select2/select2.min.css');
+        $this->template->add_js('modules/recording.js');
+        $this->template->add_js('var baseurl="'.base_url().'delivery_order/";
+            var enkrip="'.$this->enkrip().'";
+            var brgsatuurl="'.base_url('barang_satuan').'/"; 
+            $("#id_customer").select2();
+            ','embed');  
+        $default['is_approved']=true;
+        $last=$this->devdb->get_last();
+        $default['faktur']=genfaktur($last['faktur'],'DO');
         $this->template->load_view('delivery_order_view',array(
-            'view'=>'',
-            'title'=>'Kelola Data Delivery_order',
-            'subtitle'=>'Pengelolaan Delivery_order',
+            'view'=>'form_delivery',
+            'default'=>$default,
+            'opt_kirim'=>array(),
+            'opt_armada'=>array(),
+            'opt_gudang'=>array(),
+            'opt_customer'=>$this->devdb->get_customer(),
+            'title'=>'Kelola Data Order Pengiriman/Delivery Order ',
+            'subtitle'=>'Pengelolaan Order Pengiriman/Delivery Order ',
             'breadcrumb'=>array(
-            'Delivery_order'),
+            'Order Pengiriman/Delivery Order '),
         ));
         
     }
@@ -96,7 +112,7 @@ class delivery_order extends MX_Controller {
 
     public function get($id=null){
         if($id!==null){
-            echo json_encode($this->delivery_orderdb->get_one($id));
+            echo json_encode($this->devdb->get_one($id));
         }
     }
     function tables(){
@@ -105,7 +121,7 @@ class delivery_order extends MX_Controller {
 
     function getone($id=null){
         if($id!==null){
-            $data=$this->delivery_orderdb->get_one($id);
+            $data=$this->devdb->get_one($id);
             $jml=count($data);
             // print_r($jml);
             // print_r($data);
@@ -135,17 +151,17 @@ class delivery_order extends MX_Controller {
     public function submit(){
         if ($this->input->post('ajax')){
           if ($this->input->post('id')){
-            $this->delivery_orderdb->update($this->input->post('id'));
+            $this->devdb->update($this->input->post('id'));
           }else{
-            $this->delivery_orderdb->save();
+            $this->devdb->save();
           }
 
         }else{
           if ($this->input->post('submit')){
               if ($this->input->post('id')){
-                $this->delivery_orderdb->update($this->input->post('id'));
+                $this->devdb->update($this->input->post('id'));
               }else{
-                $this->delivery_orderdb->save();
+                $this->devdb->save();
               }
           }
         }
@@ -156,7 +172,7 @@ class delivery_order extends MX_Controller {
     public function delete(){
         if(isset($_POST['ajax'])){
             if(!empty($_POST['id'])){
-                $this->delivery_orderdb->delete($this->input->post('id'));
+                $this->devdb->delete($this->input->post('id'));
                 $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
             }else {
                 $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
@@ -166,7 +182,7 @@ class delivery_order extends MX_Controller {
      public function delete_detail(){
         if(isset($_POST['ajax'])){
             if(!empty($_POST['id'])){
-                $this->delivery_orderdb->delete_detail($this->input->post('id'));
+                $this->devdb->delete_detail($this->input->post('id'));
                 $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
             }else {
                 $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
@@ -174,7 +190,7 @@ class delivery_order extends MX_Controller {
         }
     } 
     private function gen_faktur(){
-        $last=$this->delivery_orderdb->get_last_pt();
+        $last=$this->devdb->get_last_pt();
         // print_r($last);
         if(!empty($last)):
             $first=substr($last['faktur_pt'],0,2);

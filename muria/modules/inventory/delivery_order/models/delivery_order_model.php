@@ -26,7 +26,19 @@ class Delivery_order_model extends CI_Model {
             return array();
         }
     }
+    function get_last(){
 
+        $this->db->select('id,faktur');
+        $this->db->order_by('id','DESC');
+        $this->db->limit(1);
+
+        $result=$this->db->get('delivery_order');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array('faktur'=>'');
+        }
+    }
     function save() {
            $data = array(
         
@@ -58,9 +70,9 @@ class Delivery_order_model extends CI_Model {
            
             'is_approved' => $this->input->post('is_approved', TRUE),
            
-            'user_id' => $this->input->post('user_id', TRUE),
+            'user_id' => userid(),
            
-            'datetime' => $this->input->post('datetime', TRUE),
+            'datetime' => now(),
            
         );
         $this->db->insert('delivery_order', $data);
@@ -99,9 +111,9 @@ class Delivery_order_model extends CI_Model {
        
        'is_approved' => $this->input->post('is_approved', TRUE),
        
-       'user_id' => $this->input->post('user_id', TRUE),
+       'user_id' => userid(),
        
-       'datetime' => $this->input->post('datetime', TRUE),
+       'datetime' => now(),
        
         );
         $this->db->where('id', $id);
@@ -127,6 +139,18 @@ class Delivery_order_model extends CI_Model {
          
       
        
+    }
+    //Update 30122014 SWI
+    //untuk Array Dropdown dari database yang lain
+    function get_customer(){
+        $result = array();
+        $array_keys_values = $this->db->query('select id,Kode,Nama,Alamat from customer order by id asc');
+        $result[0]="-- Pilih Customer --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->Nama."(".$row->Kode.") - ".$row->Alamat;
+        }
+        return $result;
     }
 
     //Update 07122013 SWI

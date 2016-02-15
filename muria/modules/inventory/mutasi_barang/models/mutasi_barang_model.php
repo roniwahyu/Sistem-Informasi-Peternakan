@@ -27,6 +27,19 @@ class Mutasi_barang_model extends CI_Model {
         }
     }
 
+    function get_last(){
+
+        $this->db->select('id,faktur');
+        $this->db->order_by('id','DESC');
+        $this->db->limit(1);
+
+        $result=$this->db->get('mutasi_barang');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array('faktur'=>'');
+        }
+    }
     function save() {
            $data = array(
         

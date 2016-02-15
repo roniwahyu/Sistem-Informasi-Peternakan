@@ -3,7 +3,7 @@
                 <div class="col-md-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Form Receive_item</h5>
+                        <h5>Form Penerimaan Barang</h5>
                         
                     </div>
                     <div class="ibox-content">
@@ -29,7 +29,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Detail receive_item</h4>
+                    <h4 class="modal-title">Detail Penerimaan Barang</h4>
                 </div>
                 <div class="modal-body">
                     
@@ -42,3 +42,25 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+<div class="modal fade" id="modal-notif">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="height:100%">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                <h3 class="panel-title">Recording Telur </h3>
+                      </div>
+                <div class="panel-body">
+                   <div class="alert alert-success">
+                       <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> -->
+                       <strong>Berhasil</strong> Recording Telur Berhasil disimpan ...
+                   </div>
+                   <div class="text-center">                   
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                   </div>
+                </div>
+            </div>
+           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

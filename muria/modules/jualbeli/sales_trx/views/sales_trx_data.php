@@ -1,23 +1,10 @@
 <div class="datatable-ajax-source">
-        <hr>
-        <h2 class="text-center">Tabel Data sales_trx</h2>
-    <div class="modal fade" id="modal-id">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Detail sales_trx</h4>
-                </div>
-                <div class="modal-body">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        <div class="btn-group" style="margin:20px 0px 30px">
+                            <a href="<?php echo base_url('sales_trx/baru') ?>" class="btn btn-lg btn-success"><i class="fa fa-plus"></i> Buka sales_trx Baru </a>
+                            <a href="<?php echo base_url('sales_trx') ?>" class="btn btn-lg btn-info"><i class="fa fa-database"></i> Data sales_trx</a>
+                        </div>
+        <h2 class="text-center" style="margin:20px 0px 30px" >Tabel Data sales_trx</h2>
+    
                                 <table id="datatables" class="table table-bordered table-condensed table-striped" style="">
                                     <thead class="">
                                         <tr>

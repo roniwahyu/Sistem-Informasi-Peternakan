@@ -7,7 +7,7 @@ class purchase_transaction extends MX_Controller {
           
         //Load IgnitedDatatables Library
         $this->load->model('purchase_transaction_model','ptdb',TRUE);
-        $this->load->model('supplier/supplier_model','spdb',TRUE);
+        $this->load->model('supplier_model','spdb',TRUE);
         $this->session->set_userdata('lihat','purchase_transaction');
         if ( !$this->ion_auth->logged_in()): 
             redirect('auth/login', 'refresh');
@@ -142,19 +142,22 @@ class purchase_transaction extends MX_Controller {
             $this->datatables->add_column('edit',"<div class='btn-group'>
                 <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('purchase_transaction/getonept/'.$enkrip.'/$1')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a>
 
-                <a href='".base_url('purchase_transaction/edit/$1/')."' data-toggle='tooltip' data-placement='top' title='Edit' class='edite btn btn-xs btn-success' id='$1'><i class='glyphicon glyphicon-edit'></i></a>
-                <button data-toggle='tooltip' data-placement='top' title='Hapus' class='delete btn btn-xs btn-danger'id='$1'><i class='glyphicon glyphicon-remove'></i></button>
                 </div>" , 'id');
             $this->datatables->unset_column('id,po');
 
       
         echo $this->datatables->generate();
     }
-    public function getdatapo(){
+    public function getdatapo($enkrip=null,$id=null){
 
         $enkrip=$this->enkrip();
-        $this->datatables->select('faktur_po,tgl_po,namasupplier,totalbayar,status,jenis_pembayaran,idpo,md5id')
-            ->from('00-00-03-00-view-purchase-order');
+        $this->datatables->select('faktur_po,tgl_po,namasupplier,totalbayar,status,idpo,md5id,idsupplier')
+            ->from('00-00-03-01-view-po-trx');
+            // ->from('00-00-03-00-view-purchase-order');
+        if(!empty($id)):
+            $this->datatables->where('idsupplier',$id);
+        endif;
+        $this->datatables->where('idpt',null);
         $this->datatables->edit_column('status','<div class="text-center">$1</div>','status');           
         $this->datatables->edit_column('totalbayar','<div class="text-right">$1</div>','rp(totalbayar)');    
         $this->datatables->add_column('edit',"<div class='btn-group'>
@@ -162,7 +165,7 @@ class purchase_transaction extends MX_Controller {
                 </div>" , 'idpo,faktur_po,md5id');
     
 
-        $this->datatables->unset_column('idpo,md5id');
+        $this->datatables->unset_column('idpo,md5id,idsupplier');
         
         echo $this->datatables->generate();
 
@@ -205,6 +208,23 @@ class purchase_transaction extends MX_Controller {
                 </div>" , 'id_detail');
             $this->datatables->unset_column('id_detail');
         return $this->datatables->generate();
+    }
+    function getorder($enkrip,$id=null){
+        $faktur=($this->ptdb->getorder_supplier($id));
+        print_r(count($faktur));
+    }
+    function tabelorder($enkrip,$id=null){
+        $this->datatables->select('idpo,faktur_po,tgl_po,kdsupplier,namasupplier,totalbayar')
+                            ->from('00-00-03-00-view-purchase-order');
+            $this->datatables->where('idsupplier',$id);
+            $this->datatables->edit_column('namasupplier','$1 ($2)','namasupplier,kdsupplier');
+            $this->datatables->edit_column('totalbayar','<div class="text-right">$1</div>','rp(totalbayar)');
+            $this->datatables->add_column('edit',"<div class='btn-group'>
+                <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('sales_order/getone/$1/')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a></div>" , 'idpo');
+            $this->datatables->unset_column('idpo,kdsupplier,idsupplier');
+       
+        echo $this->datatables->generate();
+
     }
     //get po detail dengan menggunakan enkripsi --> "id_user+Jam:Menit" saat ini
     function get_po_detail($po=null,$md5){

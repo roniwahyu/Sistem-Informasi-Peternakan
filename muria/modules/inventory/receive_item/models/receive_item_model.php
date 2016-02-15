@@ -26,7 +26,19 @@ class Receive_item_model extends CI_Model {
             return array();
         }
     }
+    function get_last(){
 
+        $this->db->select('id,faktur');
+        $this->db->order_by('id','DESC');
+        $this->db->limit(1);
+
+        $result=$this->db->get('receive_item');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
     function save() {
            $data = array(
         
@@ -62,9 +74,9 @@ class Receive_item_model extends CI_Model {
            
             'is_approved' => $this->input->post('is_approved', TRUE),
            
-            'user_id' => $this->input->post('user_id', TRUE),
+            'user_id' => userid(),
            
-            'datetime' => $this->input->post('datetime', TRUE),
+            'datetime' => now(),
            
         );
         $this->db->insert('receive_item', $data);
@@ -107,9 +119,9 @@ class Receive_item_model extends CI_Model {
        
        'is_approved' => $this->input->post('is_approved', TRUE),
        
-       'user_id' => $this->input->post('user_id', TRUE),
+       'user_id' => userid(),
        
-       'datetime' => $this->input->post('datetime', TRUE),
+       'datetime' => now(),
        
         );
         $this->db->where('id', $id);
@@ -136,7 +148,56 @@ class Receive_item_model extends CI_Model {
       
        
     }
-
+    function dropdown_kandang($mitra=null){
+        $result = array();
+        if(!empty($mitra)):
+            $array_keys_values = $this->db->query('select id,kode,NmMitra from kandang where Mitra="'.$mitra.'" order by id asc');
+        endif;
+        $result[0]="-- Pilih Kandang --";
+        if(!empty($array_keys_values)):
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kode." (".$row->NmMitra.")";
+        }
+        else:
+            $result=array('0'=>'-- Data Kandang --');
+        endif;
+        return $result;
+    }
+    function dropdown_mitra(){
+        $result = array();
+        $array_keys_values = $this->db->query('select id,kode,Nama from customer where golongan="MT" order by id asc');
+        $result[0]="-- Pilih Mitra --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->kode]= $row->kode." (".$row->Nama.")";
+        }
+        return $result;
+    }
+    function dropdown_gudang($mitra=null){
+        $result = array();
+        if(!empty($mitra)):
+        $array_keys_values = $this->db->query('select id,kd_gudang,nama from gudang where kode_mitra="'.$mitra.'" order by id asc');
+        else:
+        $array_keys_values = $this->db->query('select id,kd_gudang,nama from gudang order by id asc');
+        endif;
+        $result[0]="-- Pilih Gudang --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kd_gudang." (".$row->nama.")";
+        }
+        return $result;
+    }
+    function dropdown_supplier(){
+        $result = array();
+        $array_keys_values = $this->db->query('select id,Kode,Nama,Alamat from supplier order by id asc');
+        $result[0]="-- Pilih Customer --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->Nama." (".$row->Kode.")";
+        }
+        return $result;
+    }
     //Update 07122013 SWI
     //untuk Array Dropdown
     function get_dropdown_array($value){

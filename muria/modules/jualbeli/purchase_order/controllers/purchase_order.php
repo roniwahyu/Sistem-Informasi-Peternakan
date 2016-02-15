@@ -58,9 +58,7 @@ class purchase_order extends MX_Controller {
         $this->datatables->edit_column('totalbayar','<div class="text-right">$1</div>','rp(totalbayar)');    
             $this->datatables->add_column('edit',"<div class='btn-group'>
                 <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('purchase_order/getonepo/'.$enkrip.'/$1')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a>
-                <a href='".base_url('purchase_order/edit/'.$enkrip.'/$1')."' title='Edit' class='edite btn btn-xs btn-success' id='$1' data-purchase='$2'><i class='glyphicon glyphicon-edit'></i></a>
-                <button data-toggle='tooltip' data-placement='top' title='Hapus' class='delete btn btn-xs btn-danger'id='$1'><i class='glyphicon glyphicon-remove'></i></button>
-                
+           
                 </div>" , 'idpo,faktur_po,md5id');
     
 

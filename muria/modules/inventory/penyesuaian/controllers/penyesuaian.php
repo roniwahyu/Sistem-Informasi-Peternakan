@@ -6,7 +6,7 @@ class penyesuaian extends MX_Controller {
         parent::__construct();
           
         //Load IgnitedDatatables Library
-        $this->load->model('penyesuaian_model','penyesuaiandb',TRUE);
+        $this->load->model('penyesuaian_model','fixdb',TRUE);
         $this->session->set_userdata('lihat','penyesuaian');
         if ( !$this->ion_auth->logged_in()): 
             redirect('auth/login', 'refresh');
@@ -24,7 +24,7 @@ class penyesuaian extends MX_Controller {
         $this->template->set_title('Kelola Penyesuaian');
         $this->template->add_js('var baseurl="'.base_url().'penyesuaian/";','embed');  
         $this->template->load_view('penyesuaian_view',array(
-            'view'=>'',
+            'view'=>'penyesuaian_data',
             'title'=>'Kelola Data Penyesuaian',
             'subtitle'=>'Pengelolaan Penyesuaian',
             'breadcrumb'=>array(
@@ -32,10 +32,27 @@ class penyesuaian extends MX_Controller {
         ));
     }
      public function baru() {
+        $this->template->add_js('plugins/select2/select2.min.js');
+        $this->template->add_css('plugins/select2/select2.min.css');
         $this->template->set_title('Kelola Penyesuaian');
-        $this->template->add_js('var baseurl="'.base_url().'penyesuaian/";','embed');  
+        $this->template->add_js('
+            var baseurl="'.base_url().'penyesuaian/";
+            var brgsatuurl="'.base_url('barang_satuan').'/";
+             var enkrip="'.$this->enkrip().'";
+            $("#id_barang").select2(); 
+
+            ','embed');  
+        $last=$this->fixdb->get_last();
+        
+        $this->template->add_js('modules/recording.js');
+        $default['tanggal']=date('Y-m-d');
+        $default['faktur']=genfaktur($last['faktur'],'PY');
         $this->template->load_view('penyesuaian_view',array(
-            'view'=>'',
+            'view'=>'form_penyesuaian',
+            'default'=>$default,
+            'opt_gudang'=>$this->fixdb->dropdown_gudang(),
+            'opt_barang'=>$this->fixdb->dropdown_barang(),
+            'opt_satuan'=>array(),
             'title'=>'Kelola Data Penyesuaian',
             'subtitle'=>'Pengelolaan Penyesuaian',
             'breadcrumb'=>array(
@@ -49,8 +66,8 @@ class penyesuaian extends MX_Controller {
 
     public function getdatatables(){
         if($this->isadmin()==1):
-            $this->datatables->select('id,faktur,faktur_reff,tanggal,id_gudang,keterangan,akun,total_nilai,user_id,datetime,')
-                            ->from('penyesuaian');
+            $this->datatables->select('id,faktur,faktur_reff,tanggal,akun,namagudang,keterangan,')
+                            ->from('00-00-20-00-view-penyesuaian-barang');
             $this->datatables->add_column('edit',"<div class='btn-group'>
                 <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('penyesuaian/getone/$1/')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a>
 
@@ -60,13 +77,59 @@ class penyesuaian extends MX_Controller {
             $this->datatables->unset_column('id');
 
         else:
-            $this->datatables->select('id,faktur,faktur_reff,tanggal,id_gudang,keterangan,akun,total_nilai,user_id,datetime,')
-                            ->from('penyesuaian');
+            $this->datatables->select('id,faktur,faktur_reff,tanggal,akun,namagudang,keterangan,')
+                            ->from('00-00-20-00-view-penyesuaian-barang');
             $this->datatables->add_column('edit',"<div class='btn-group'>
                 <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('penyesuaian/getone/$1/')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a></div>" , 'id');
             $this->datatables->unset_column('id');
         endif;
         echo $this->datatables->generate();
+    }
+    public function getdetail($enkrip,$faktur){
+            // $dec=dekrip($faktur);
+            // print_r($dec);
+            $this->datatables->select('id_detail,faktur,Kode,Nama,jumlah,jumlah_baru,satuan,keterangan')
+                            ->from('00-00-20-01-view-penyesuaian-barang-detail');
+                        // $this->datatables->where('faktur',$dec);
+                        $this->datatables->where('faktur',$faktur);
+         
+            $this->datatables->add_column('edit',"<div class='btn-group'>
+                <a data-toggle='modal' href='#modal-id' data-load-remote='".base_url('recording_pakan_detail/getone/$1/')."' data-remote-target='#modal-id .modal-body' class='btn btn-info btn-xs'><i class='fa fa-info-circle'></i> </a></div>
+                <a id='$1' href='#' class='del_detail btn btn-danger btn-xs'><i class='fa fa-remove'></i> </a></div>" , 'id_detail');
+            $this->datatables->unset_column('id_detail,Kode');
+        echo $this->datatables->generate();
+    }
+    function dropdown_satuan($id_barang){
+        $result = array();
+        $sql="select idsatuan,value,descrip,kode
+            from(
+            select id, id_barang,kode,'1' idsatuan,Satuan1 VALUE,'Satuan1' descrip from `00-00-01-05-view-barang-satuan` where id_barang='$id_barang'
+            union all
+            select id, id_barang,kode,'2' idsatuan,Satuan2 VALUE,'Satuan2' descrip from `00-00-01-05-view-barang-satuan` where id_barang='$id_barang'
+            union all
+            select id, id_barang,kode,'3' idsatuan,Satuan3 VALUE,'Satuan3' descrip from `00-00-01-05-view-barang-satuan` where id_barang='$id_barang'
+            ) src group by descrip ";
+        // $array_keys_values = $this->db->query('select id,Kode,Nama from supplier order by id asc');
+        $array_keys_values = $this->db->query($sql);
+        $result[0]="-- Pilih Satuan --";
+        $i=1;
+        // print_r($array_keys_values->result_array());
+        // foreach ($array_keys_values->result_array() as $key => $row)
+        foreach ($array_keys_values->result() as $row)
+        {
+            if($row->value!=null):
+                /*$result=array(
+                    $row['idsatuan']=>$row['value']." (".$row['descrip'].")",
+                    );*/
+                // $result[$i]=$row['value']." (".$row['descrip'].")";
+                $result[$row->idsatuan]= $row->value." (".$row->descrip.")";
+            endif;
+            $i++;
+        }
+        echo json_encode($result);
+    }
+    function get_total($enkrip=null,$faktur=null){
+        echo json_encode(array());
     }
     function enkrip(){
         return md5($this->session->userdata('lihat').":".$this->getuser()."+".date('H:m'));
@@ -96,7 +159,7 @@ class penyesuaian extends MX_Controller {
 
     public function get($id=null){
         if($id!==null){
-            echo json_encode($this->penyesuaiandb->get_one($id));
+            echo json_encode($this->fixdb->get_one($id));
         }
     }
     function tables(){
@@ -105,7 +168,7 @@ class penyesuaian extends MX_Controller {
 
     function getone($id=null){
         if($id!==null){
-            $data=$this->penyesuaiandb->get_one($id);
+            $data=$this->fixdb->get_one($id);
             $jml=count($data);
             // print_r($jml);
             // print_r($data);
@@ -135,28 +198,63 @@ class penyesuaian extends MX_Controller {
     public function submit(){
         if ($this->input->post('ajax')){
           if ($this->input->post('id')){
-            $this->penyesuaiandb->update($this->input->post('id'));
+            $this->fixdb->update($this->input->post('id'));
           }else{
-            $this->penyesuaiandb->save();
+            $this->fixdb->save();
           }
 
         }else{
           if ($this->input->post('submit')){
               if ($this->input->post('id')){
-                $this->penyesuaiandb->update($this->input->post('id'));
+                $this->fixdb->update($this->input->post('id'));
               }else{
-                $this->penyesuaiandb->save();
+                $this->fixdb->save();
               }
           }
         }
     }
-    
+    public function submit_detail($id){
+        $id=$this->input->post('id_detail');
+         $data = array(
+        
+           'faktur' => $this->input->post('faktur', TRUE),
+           
+            'id_barang' => $this->input->post('id_barang', TRUE),
+           
+            'id_satuan' => $this->input->post('id_satuan', TRUE),
+           
+            'jumlah' => $this->input->post('jumlah', TRUE),
+           
+            'jumlah_baru' => $this->input->post('jumlah_baru', TRUE),
+            'ket_detail' => $this->input->post('ket_detail', TRUE),
+           
+            'user_id' => userid(),
+           
+            'datetime' => now(),
+        );
+        if ($this->input->post('ajax')){
+          if ($id){
+            $this->fixdb->update($id);
+          }else{
+            $this->fixdb->save_detail($data);
+          }
+
+        }else{
+          if ($this->input->post('submit')){
+              if ($id){
+                $this->fixdb->update($id);
+              }else{
+                $this->fixdb->save_detail($data);
+              }
+          }
+        }
+    }
 
     
     public function delete(){
         if(isset($_POST['ajax'])){
             if(!empty($_POST['id'])){
-                $this->penyesuaiandb->delete($this->input->post('id'));
+                $this->fixdb->delete($this->input->post('id'));
                 $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
             }else {
                 $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
@@ -166,7 +264,7 @@ class penyesuaian extends MX_Controller {
      public function delete_detail(){
         if(isset($_POST['ajax'])){
             if(!empty($_POST['id'])){
-                $this->penyesuaiandb->delete_detail($this->input->post('id'));
+                $this->fixdb->delete_detail($this->input->post('id'));
                 $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
             }else {
                 $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
@@ -174,7 +272,7 @@ class penyesuaian extends MX_Controller {
         }
     } 
     private function gen_faktur(){
-        $last=$this->penyesuaiandb->get_last_pt();
+        $last=$this->fixdb->get_last_pt();
         // print_r($last);
         if(!empty($last)):
             $first=substr($last['faktur_pt'],0,2);

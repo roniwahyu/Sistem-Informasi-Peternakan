@@ -44,9 +44,9 @@ class Penyesuaian_detail_model extends CI_Model {
            
             'id_kandang' => $this->input->post('id_kandang', TRUE),
            
-            'user_id' => $this->input->post('user_id', TRUE),
+            'user_id' => userid(),
            
-            'datetime' => $this->input->post('datetime', TRUE),
+            'datetime' => now(),
            
         );
         $this->db->insert('penyesuaian_detail', $data);
@@ -71,9 +71,9 @@ class Penyesuaian_detail_model extends CI_Model {
        
        'id_kandang' => $this->input->post('id_kandang', TRUE),
        
-       'user_id' => $this->input->post('user_id', TRUE),
+       'user_id' => userid(),
        
-       'datetime' => $this->input->post('datetime', TRUE),
+       'datetime' => now(),
        
         );
         $this->db->where('id_detail', $id_detail);

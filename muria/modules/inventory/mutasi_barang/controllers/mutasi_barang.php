@@ -6,7 +6,7 @@ class mutasi_barang extends MX_Controller {
         parent::__construct();
           
         //Load IgnitedDatatables Library
-        $this->load->model('mutasi_barang_model','mutasi_barangdb',TRUE);
+        $this->load->model('mutasi_barang_model','mutasidb',TRUE);
         $this->session->set_userdata('lihat','mutasi_barang');
         if ( !$this->ion_auth->logged_in()): 
             redirect('auth/login', 'refresh');
@@ -24,7 +24,7 @@ class mutasi_barang extends MX_Controller {
         $this->template->set_title('Kelola Mutasi_barang');
         $this->template->add_js('var baseurl="'.base_url().'mutasi_barang/";','embed');  
         $this->template->load_view('mutasi_barang_view',array(
-            'view'=>'',
+            'view'=>'mutasi_barang_data',
             'title'=>'Kelola Data Mutasi_barang',
             'subtitle'=>'Pengelolaan Mutasi_barang',
             'breadcrumb'=>array(
@@ -33,9 +33,13 @@ class mutasi_barang extends MX_Controller {
     }
      public function baru() {
         $this->template->set_title('Kelola Mutasi_barang');
-        $this->template->add_js('var baseurl="'.base_url().'mutasi_barang/";','embed');  
+        $this->template->add_js('var baseurl="'.base_url().'mutasi_barang/";','embed'); 
+        
+        $last=$this->mutasidb->get_last(); 
+        $default['faktur']=genfaktur($last['faktur'],'MB');
         $this->template->load_view('mutasi_barang_view',array(
-            'view'=>'',
+            'view'=>'form_mutasi',
+            'default'=>$default,
             'title'=>'Kelola Data Mutasi_barang',
             'subtitle'=>'Pengelolaan Mutasi_barang',
             'breadcrumb'=>array(
@@ -96,7 +100,7 @@ class mutasi_barang extends MX_Controller {
 
     public function get($id=null){
         if($id!==null){
-            echo json_encode($this->mutasi_barangdb->get_one($id));
+            echo json_encode($this->mutasidb->get_one($id));
         }
     }
     function tables(){
@@ -105,7 +109,7 @@ class mutasi_barang extends MX_Controller {
 
     function getone($id=null){
         if($id!==null){
-            $data=$this->mutasi_barangdb->get_one($id);
+            $data=$this->mutasidb->get_one($id);
             $jml=count($data);
             // print_r($jml);
             // print_r($data);
@@ -135,17 +139,17 @@ class mutasi_barang extends MX_Controller {
     public function submit(){
         if ($this->input->post('ajax')){
           if ($this->input->post('id')){
-            $this->mutasi_barangdb->update($this->input->post('id'));
+            $this->mutasidb->update($this->input->post('id'));
           }else{
-            $this->mutasi_barangdb->save();
+            $this->mutasidb->save();
           }
 
         }else{
           if ($this->input->post('submit')){
               if ($this->input->post('id')){
-                $this->mutasi_barangdb->update($this->input->post('id'));
+                $this->mutasidb->update($this->input->post('id'));
               }else{
-                $this->mutasi_barangdb->save();
+                $this->mutasidb->save();
               }
           }
         }
@@ -156,7 +160,7 @@ class mutasi_barang extends MX_Controller {
     public function delete(){
         if(isset($_POST['ajax'])){
             if(!empty($_POST['id'])){
-                $this->mutasi_barangdb->delete($this->input->post('id'));
+                $this->mutasidb->delete($this->input->post('id'));
                 $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
             }else {
                 $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
@@ -166,7 +170,7 @@ class mutasi_barang extends MX_Controller {
      public function delete_detail(){
         if(isset($_POST['ajax'])){
             if(!empty($_POST['id'])){
-                $this->mutasi_barangdb->delete_detail($this->input->post('id'));
+                $this->mutasidb->delete_detail($this->input->post('id'));
                 $this->session->set_flashdata('notif','Succeed, Data Has Deleted');
             }else {
                 $this->session->set_flashdata('notif', 'Failed! No Data Deleted');
@@ -174,7 +178,7 @@ class mutasi_barang extends MX_Controller {
         }
     } 
     private function gen_faktur(){
-        $last=$this->mutasi_barangdb->get_last_pt();
+        $last=$this->mutasidb->get_last_pt();
         // print_r($last);
         if(!empty($last)):
             $first=substr($last['faktur_pt'],0,2);

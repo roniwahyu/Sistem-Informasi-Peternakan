@@ -1,44 +1,20 @@
 <div class="datatable-ajax-source">
-        <hr>
-        <h2 class="text-center">Tabel Data sales_order</h2>
-    <div class="modal fade" id="modal-id">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Detail sales_order</h4>
-                </div>
-                <div class="modal-body">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        <div class="btn-group" style="margin:20px 0px 30px">
+                            <a href="<?php echo base_url('sales_order/baru') ?>" class="btn btn-lg btn-success"><i class="fa fa-plus"></i> Buka sales_order Baru </a>
+                            <a href="<?php echo base_url('sales_order') ?>" class="btn btn-lg btn-info"><i class="fa fa-database"></i> Data sales_order</a>
+                        </div>
+        <h2 class="text-center" style="margin:20px 0px 30px" >Tabel Data sales_order</h2>
+    
                                 <table id="datatables" class="table table-bordered table-condensed table-striped" style="">
                                     <thead class="">
                                         <tr>
                                                        
-                                                        <th>faktur</th>
-                                                        <th>tgl</th>
-                                                        <th>tgl_kedaluarsa</th>
-                                                        <th>tgl_terima</th>
-                                                        <th>id_customer</th>
-                                                        <th>id_sales</th>
-                                                        <th>keterangan</th>
-                                                        <th>ref</th>
-                                                        <th>id_bayar</th>
-                                                        <th>totalbayar</th>
-                                                        <th>pajak</th>
-                                                        <th>total_pajak</th>
-                                                        <th>grandtotal</th>
-                                                        <th>biaya_lain</th>
-                                                        <th>status</th>
-                                                        <th>id_user</th>
-                                                        <th>datetime</th>
+                                                        <th>Faktur</th>
+                                                        <th>Tanggal</th>                                                     
+                                                        <th>Customer</th>
+                                                        <th>Salesman</th>
+                                                        <th>Grand Total</th>
+                                                        <th>Keterangan</th>
                                                         <th>Aksi</th>
 
                                                     </tr>
@@ -46,7 +22,7 @@
 
                                     <tbody class="table-bordered">
                                         <tr>
-                                            <td colspan="18" class="text-center dataTables_empty"><img src="<?php echo assets_url('images/loader.gif');  ?>" title="Loading" alt="Loading">&nbsp;&nbsp; Loading data, please wait....</td>
+                                            <td colspan="7" class="text-center dataTables_empty"><img src="<?php echo assets_url('images/loader.gif');  ?>" title="Loading" alt="Loading">&nbsp;&nbsp; Loading data, please wait....</td>
                                             
                                         </tr>
                                         

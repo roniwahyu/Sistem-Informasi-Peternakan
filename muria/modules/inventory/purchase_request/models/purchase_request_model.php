@@ -26,7 +26,46 @@ class Purchase_request_model extends CI_Model {
             return array();
         }
     }
+    function get_last(){
 
+        $this->db->select('id,faktur');
+        $this->db->order_by('id','DESC');
+        $this->db->limit(1);
+
+        $result=$this->db->get('purchase_request');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array('faktur'=>'');
+        }
+    }
+    function getoneview($id) {
+        $this->db->where('id', $id);
+        $result = $this->db->get('00-00-17-00-view-purchase-request');
+        if ($result->num_rows() == 1) {
+            return $result->row_array();
+        } else {
+            return array();
+        }
+    }
+    function getdetailview($faktur) {
+        $this->db->where('faktur', $faktur);
+        $result = $this->db->get('00-00-17-01-view-purchase-request-detail');
+        if ($result->num_rows() >0) {
+            return $result->result_array();
+        } else {
+            return array();
+        }
+    }
+     function get_detail($faktur) {
+        $this->db->where('faktur', $faktur);
+        $result = $this->db->get('purchase_request_detail');
+        if ($result->num_rows() >0) {
+            return $result->result_array();
+        } else {
+            return array();
+        }
+    }
     function save() {
            $data = array(
         
@@ -46,11 +85,11 @@ class Purchase_request_model extends CI_Model {
            
             'catatan' => $this->input->post('catatan', TRUE),
            
-            'user_id' => $this->input->post('user_id', TRUE),
+            'user_id' => userid(),
            
             'is_approved' => $this->input->post('is_approved', TRUE),
            
-            'datetime' => $this->input->post('datetime', TRUE),
+            'datetime' =>now(),
            
         );
         $this->db->insert('purchase_request', $data);
@@ -77,11 +116,11 @@ class Purchase_request_model extends CI_Model {
        
        'catatan' => $this->input->post('catatan', TRUE),
        
-       'user_id' => $this->input->post('user_id', TRUE),
+       'user_id' => userid(),
        
        'is_approved' => $this->input->post('is_approved', TRUE),
        
-       'datetime' => $this->input->post('datetime', TRUE),
+       'datetime' =>now(),
        
         );
         $this->db->where('id', $id);
@@ -109,6 +148,60 @@ class Purchase_request_model extends CI_Model {
        
     }
 
+function dropdown_barang($kategori=null){
+        $result = array();
+        if(!empty($kategori)):
+            $array_keys_values = $this->db->query('select id,Kode,Nama from `00-00-01-06-view-barang-kategori` where id_golongan='.$kategori.' order by id asc');
+        else:
+            $array_keys_values = $this->db->query('select id,Kode,Nama from `00-00-01-06-view-barang-kategori` order by id asc');
+        endif;
+        $result[0]="-- Pilih Barang --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->Kode." (".$row->Nama.")";
+        }
+        return $result;
+    } 
+function dropdown_kandang($mitra=null){
+        $result = array();
+        if(!empty($mitra)):
+            $array_keys_values = $this->db->query('select id,kode,NmMitra from kandang where Mitra="'.$mitra.'" order by id asc');
+        endif;
+        $result[0]="-- Pilih Kandang --";
+        if(!empty($array_keys_values)):
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kode." (".$row->NmMitra.")";
+        }
+        else:
+            $result=array('0'=>'-- Data Kandang --');
+        endif;
+        return $result;
+    }
+    function dropdown_mitra(){
+        $result = array();
+        $array_keys_values = $this->db->query('select id,kode,Nama from customer where golongan="MT" order by id asc');
+        $result[0]="-- Pilih Mitra --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->kode]= $row->kode." (".$row->Nama.")";
+        }
+        return $result;
+    }
+    function dropdown_gudang($mitra=null){
+        $result = array();
+        if(!empty($mitra)):
+        $array_keys_values = $this->db->query('select id,kd_gudang,nama from gudang where kode_mitra="'.$mitra.'" or id_mitra="0" order by id asc');
+        else:
+        $array_keys_values = $this->db->query('select id,kd_gudang,nama from gudang where id_mitra="0" order by id asc');
+        endif;
+        $result[0]="-- Pilih Gudang --";
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[$row->id]= $row->kd_gudang." (".$row->nama.")";
+        }
+        return $result;
+    }       
     //Update 07122013 SWI
     //untuk Array Dropdown
     function get_dropdown_array($value){
