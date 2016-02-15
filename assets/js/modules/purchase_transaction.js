@@ -17,6 +17,8 @@ $("document").ready(function(){
           
             $("body").on("change","#id_supplier",function(){
                 var trx=$("#id_tipe_beli");
+                c = $(this).val();
+                cek_order(c);
                 if(trx=="1"){
                     reset_barang(enkrip);
                 }
@@ -465,3 +467,83 @@ $("document").ready(function(){
                     // alert(newfaktur);
                 });
             };
+
+            function cek_order(id){
+                $.getJSON(baseurl+'getorder/'+enkrip+"/"+id, function (data) {
+                        // alert(data.faktur);
+                        
+                         if(data>0){
+                            alert("Customer ini memiliki Sales Order, Gunakan?");
+                            // Temptbl.ajax.url(baseurl+"getdatapo/"+enkrip+"/"+id).load();
+
+                            
+                            var Tabelso = $(".table-po").DataTable({
+                                "ajax":{
+                                    "url":baseurl+"getdatapo/"+enkrip+"/"+id,
+                                    // "url":baseurl+"getdetail/"+enkrip+"/"+enfaktur,
+                                    "dataType": "json"
+                                },
+                                "sServerMethod": "POST",
+                                "bServerSide": true,
+                                 "paging":   false,
+                                "deferRender": true,
+                                "bFilter":false,
+                                 "ordering": false,  
+                            });
+                            // var po_url=baseurl+'tabelorder/'+enkrip+"/"+id+"/";
+                            // Tabeltrx.ajax.url(po_url).load();
+                            $("#modal-panel").modal("show");
+                            // $("#modal-id").modal('show');
+                             // $("#modal-panel .modal-body").html("oke");
+                         }
+                     });
+                   /* $( "#modal-panel" ).on('shown.bs.modal', function(){
+                                alert("I want this to appear after the modal has opened!");
+                            });*/
+                    $("#modal-panel").on("hidden.bs.modal", function(){
+                        $(this).data("modal", null);
+                        $(this).removeData('bs.modal');
+                        $(".table-po").DataTable().destroy();
+                    });
+                
+
+            }
+           /* function cek_order(id){
+                $.getJSON(baseurl+'getorder/'+enkrip+"/"+id, function (data) {
+                        // alert(data.faktur);
+                        
+                         if(data>0){
+                            alert("Customer ini memiliki Sales Order, Gunakan?");
+                            var Tabelso = $(".table-so").DataTable({
+                                "ajax":{
+                                    "url":baseurl+"tabelorder/"+enkrip+"/"+id,
+                                    // "url":baseurl+"getdetail/"+enkrip+"/"+enfaktur,
+                                    "dataType": "json"
+                                },
+                                "sServerMethod": "POST",
+                                "bServerSide": true,
+                                 "paging":   false,
+                                "deferRender": true,
+                                "bFilter":false,
+                                 "ordering": false,  
+                            });
+                            // var po_url=baseurl+'tabelorder/'+enkrip+"/"+id+"/";
+                            // Tabeltrx.ajax.url(po_url).load();
+                             $("#modal-panel").modal("show");
+
+                             // $("#modal-panel .modal-body").html("oke");
+                         }
+                     });
+                   /* $( "#modal-panel" ).on('shown.bs.modal', function(){
+                                alert("I want this to appear after the modal has opened!");
+                            });*/
+                   
+                   /* $("#modal-panel").on("hidden.bs.modal", function(){
+                        $(this).data("modal", null);
+                        $(this).removeData('bs.modal');
+                        $(".table-so").DataTable().destroy();
+                    });
+                   
+
+
+            }*/
