@@ -1,5 +1,8 @@
 Sistem Informasi Peternakan
+---------------------------------
+
 Module:
+---------------------------------
 - Peternakan
 	- Recording
 		- Ayam
@@ -14,11 +17,11 @@ Module:
 - Penjualan dan Pembelian
 - Karyawan
 --------------------------------
----------------------------------
 
-Petunjuk Penggunaan
+
 
 Silakan Hubungi kami:
+---------------------------------
 Syahroni Wahyu Iriananda, S.Kom
 roniwahyu at gmail dot com
 085 649 555 925
